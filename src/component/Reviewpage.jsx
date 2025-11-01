@@ -22,8 +22,8 @@ const ReviewPage = () => {
 
   
   const getGenderFromName = (name) => {
-    const femaleNames = ['ankita', 'ayushi'];;
-    const maleNames = ['ankit', 'ram', 'pawan']
+    const femaleNames = ['ankita', 'ayushi', "radha"];;
+    const maleNames = ['ankit', 'ram', 'pawan', "Aditya", "Asmik", "sumit"]
 
     const first = name.trim().split(' ')[0].toLowerCase();
 
@@ -176,8 +176,7 @@ const ReviewPage = () => {
         ) : (
           reviews.map(review => {
             const gender = getGenderFromName(review.name);
-            const imageId = getConsistentRandom(review.name, review.id, 90) + 10;   // 10-99
-
+            const imageId = getConsistentRandom(review.name, review.id, 90) + 10;  
             return (
               <div key={review.id} className="review">
                 <img

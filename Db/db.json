@@ -1,7 +1,7 @@
 {
   "companies": [
     {
-      "id": 1,
+      "id": "1",
       "name": "ABC Corp",
       "address": "Indore",
       "logo": "A",
@@ -10,30 +10,31 @@
       "rating": 4.5
     },
     {
-      "id": "da57",
-      "logo": "czx",
-      "bgColor": "#333333",
-      "name": "xzczxzcxczxc",
-      "address": "zcxzxcz",
-      "founded": "2025-10-31",
-      "rating": 3.75,
+      "id": "00ef",
+      "logo": "DB",
+      "bgColor": "#46838b",
+      "name": "brand",
+      "address": "Indore",
+      "founded": "2025-11-01",
+      "rating": 3.5,
       "reviews": 0,
-      "reviewsCount": 8
+      "reviewsCount": 2
     },
     {
-      "id": "5af2",
-      "logo": "fghjkl",
-      "bgColor": "#273b63",
-      "name": "fghjkl",
-      "address": "vghjkl;",
-      "founded": "2025-10-31",
-      "rating": 0,
-      "reviews": 0
+      "id": "edf4",
+      "logo": "AI",
+      "bgColor": "#1ce2fd",
+      "name": "AI",
+      "address": "Bhopal,mp nagar",
+      "founded": "2025-11-01",
+      "rating": 5,
+      "reviews": 0,
+      "reviewsCount": 1
     }
   ],
   "reviews": [
     {
-      "id": 1,
+      "id": "1",
       "companyId": 1,
       "name": "Rahul",
       "subject": "Great",
@@ -42,75 +43,30 @@
       "date": "31/10/2025 10:30"
     },
     {
-      "id": "44b0",
-      "companyId": null,
+      "id": "8c5a",
+      "companyId": 0,
       "name": "Aditya Jain",
-      "date": "31/10/2025 18:59",
-      "subject": "React.js and Node.js Developer",
-      "text": "asdfghj",
+      "date": "01/11/2025 14:12",
+      "subject": "new brand",
+      "text": "A brand review is a comprehensive assessment of a company's brand identity, strategy, and market perception. It is performed to understand a brand's current health and effectiveness at a specific point in time",
       "rating": 5
     },
     {
-      "id": "e2f3",
-      "companyId": null,
-      "name": "sadasd",
-      "date": "31/10/2025 19:02",
-      "subject": "dsaas",
-      "text": "sadasdasdasdasd",
+      "id": "1ec5",
+      "companyId": 0,
+      "name": "Pawan",
+      "date": "01/11/2025 14:15",
+      "subject": "very bad",
+      "text": "The website was user-friendly, the ordering process was seamless, and the product arrived on time and in perfect condition",
       "rating": 2
     },
     {
-      "id": "9c49",
+      "id": "b498",
       "companyId": null,
-      "name": "fghjk",
-      "date": "31/10/2025 20:59",
-      "subject": "dfghjkl",
-      "text": "dfghjklugfghjk",
-      "rating": 2
-    },
-    {
-      "id": "950b",
-      "companyId": null,
-      "name": "dfghj",
-      "date": "31/10/2025 22:15",
-      "subject": "fghjk",
-      "text": "dfghjkl",
-      "rating": 5
-    },
-    {
-      "id": "44f0",
-      "companyId": null,
-      "name": "zxdfghjk",
-      "date": "31/10/2025 22:17",
-      "subject": "cghjkl",
-      "text": "dfghjkl",
-      "rating": 5
-    },
-    {
-      "id": "d075",
-      "companyId": null,
-      "name": "aaaaaaaaaaaaaaaaaaaaJain",
-      "date": "31/10/2025 22:18",
-      "subject": "React.js and Node.js Developer",
-      "text": "aa",
-      "rating": 5
-    },
-    {
-      "id": "724b",
-      "companyId": null,
-      "name": "Rahul Sharma",
-      "date": "31/10/2025 22:22",
-      "subject": "React.js and Node.js Developer",
-      "text": "hh",
-      "rating": 1
-    },
-    {
-      "id": "8b69",
-      "companyId": null,
-      "name": "hh",
-      "date": "31/10/2025 22:24",
-      "subject": "hh",
-      "text": "hh",
+      "name": "Sumit",
+      "date": "01/11/2025 14:16",
+      "subject": "Good for model website",
+      "text": "The website was user-friendly, the ordering process was seamless, and the product arrived on time and in perfect condition",
       "rating": 5
     }
   ]

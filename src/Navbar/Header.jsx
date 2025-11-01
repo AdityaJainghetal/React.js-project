@@ -1,19 +1,29 @@
-
-import React from 'react';
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/");
+  };
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        
-      
-          <span style={{fontSize:"30px", fontFamily:"inherit", fontWeight:"600", marginLeft:"-20px"}} >⭐ Review&RATE</span>
+        <span
+          onClick={handleClick}
+          style={{
+            fontSize: "30px",
+            fontFamily: "inherit",
+            fontWeight: "600",
+            marginLeft: "-20px",
+            cursor: "pointer", 
+          }}
+        >
+          ⭐ Review & RATE
+        </span>
         <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="search-input"
-          />
+          <input type="text" placeholder="Search..." className="search-input" />
           <button className="search-btn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -32,10 +42,13 @@ const Header = () => {
           </button>
         </div>
 
-    
         <div className="auth-links">
-          <a href="/signup" className="signup-link">Sign Up</a>
-          <a href="/login" className="login-link">Login</a>
+          <a href="/signup" className="signup-link">
+            Sign Up
+          </a>
+          <a href="/login" className="login-link">
+            Login
+          </a>
         </div>
       </div>
     </nav>
