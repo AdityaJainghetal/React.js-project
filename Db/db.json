@@ -1,15 +1,6 @@
 {
   "companies": [
     {
-      "id": "1",
-      "name": "ABC Corp",
-      "address": "Indore",
-      "logo": "A",
-      "bgColor": "#ff0000",
-      "founded": "2020-01-01",
-      "rating": 4.5
-    },
-    {
       "id": "00ef",
       "logo": "DB",
       "bgColor": "#46838b",
@@ -30,6 +21,16 @@
       "rating": 5,
       "reviews": 0,
       "reviewsCount": 1
+    },
+    {
+      "id": "7aad",
+      "logo": "ABC",
+      "bgColor": "#dd2c2c",
+      "name": "logo",
+      "address": "Indore city, Vijay nagar",
+      "founded": "2025-11-01",
+      "rating": 0,
+      "reviews": 0
     }
   ],
   "reviews": [
