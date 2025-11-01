@@ -31,7 +31,7 @@
       "founded": "2025-11-01",
       "rating": 5,
       "reviews": 0,
-      "reviewsCount": 1
+      "reviewsCount": 2
     }
   ],
   "reviews": [
@@ -96,6 +96,15 @@
       "date": "01/11/2025 15:38",
       "subject": "very good",
       "text": "good",
+      "rating": 5
+    },
+    {
+      "id": "6df7",
+      "companyId": "39f3",
+      "name": "Aditya Jain",
+      "date": "01/11/2025 15:51",
+      "subject": "very good",
+      "text": "goood",
       "rating": 5
     }
   ]
