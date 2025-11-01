@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import CompanyCard from "./CompanyCard";
 
-function Home() {
+
+
+const Home = () => {
+ 
+
   const [companies, setCompanies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
