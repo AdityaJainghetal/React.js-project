@@ -1,48 +1,40 @@
 {
   "companies": [
     {
-      "id": "00ef",
-      "logo": "DB",
-      "bgColor": "#46838b",
-      "name": "brand",
-      "address": "Indore",
+      "id": "ee66",
+      "logo": "MY",
+      "bgColor": "#cf3a3a",
+      "name": "Myntra",
+      "address": "Vijay nagar",
+      "founded": "2025-11-01",
+      "rating": 5,
+      "reviews": 0,
+      "reviewsCount": 3
+    },
+    {
+      "id": "3567",
+      "logo": "AI",
+      "bgColor": "#31869b",
+      "name": "AI",
+      "address": "Bhopal",
       "founded": "2025-11-01",
       "rating": 3.5,
       "reviews": 0,
       "reviewsCount": 2
     },
     {
-      "id": "edf4",
-      "logo": "AI",
-      "bgColor": "#1ce2fd",
-      "name": "AI",
-      "address": "Bhopal,mp nagar",
+      "id": "39f3",
+      "logo": "logo",
+      "bgColor": "#bf2b2b",
+      "name": "Gemini",
+      "address": "Bhopal",
       "founded": "2025-11-01",
       "rating": 5,
       "reviews": 0,
       "reviewsCount": 1
-    },
-    {
-      "id": "7aad",
-      "logo": "ABC",
-      "bgColor": "#dd2c2c",
-      "name": "logo",
-      "address": "Indore city, Vijay nagar",
-      "founded": "2025-11-01",
-      "rating": 0,
-      "reviews": 0
     }
   ],
   "reviews": [
-    {
-      "id": "1",
-      "companyId": 1,
-      "name": "Rahul",
-      "subject": "Great",
-      "text": "Loved it!",
-      "rating": 5,
-      "date": "31/10/2025 10:30"
-    },
     {
       "id": "8c5a",
       "companyId": 0,
@@ -53,21 +45,57 @@
       "rating": 5
     },
     {
-      "id": "1ec5",
-      "companyId": 0,
-      "name": "Pawan",
-      "date": "01/11/2025 14:15",
+      "id": "cf63",
+      "companyId": 3567,
+      "name": "Aditya Jain",
+      "date": "01/11/2025 14:45",
+      "subject": "Good for model website",
+      "text": "An AI brand review example involves using AI to analyze customer feedback to find actionable insights, such as a running shoe company discovering a consistent complaint about a narrow toe box in its reviews",
+      "rating": 5
+    },
+    {
+      "id": "99a2",
+      "companyId": 3567,
+      "name": "Sumit",
+      "date": "01/11/2025 14:46",
       "subject": "very bad",
-      "text": "The website was user-friendly, the ordering process was seamless, and the product arrived on time and in perfect condition",
+      "text": "AI analysis of negative reviews: AI identifies a frequent complaint among 3-star reviews: the \"sizing runs small,\" specifically a \"narrow toe box\".",
       "rating": 2
     },
     {
-      "id": "b498",
-      "companyId": null,
+      "id": "6b18",
+      "companyId": 39,
+      "name": "adasd",
+      "date": "01/11/2025 14:54",
+      "subject": "dasasdaas",
+      "text": "sadasd",
+      "rating": 5
+    },
+    {
+      "id": "7ffa",
+      "companyId": "ee66",
+      "name": "Aditya Jain",
+      "date": "01/11/2025 15:19",
+      "subject": "React.js and Node.js Developer",
+      "text": "aa",
+      "rating": 5
+    },
+    {
+      "id": "cf9a",
+      "companyId": "ee66",
       "name": "Sumit",
-      "date": "01/11/2025 14:16",
+      "date": "01/11/2025 15:27",
       "subject": "Good for model website",
-      "text": "The website was user-friendly, the ordering process was seamless, and the product arrived on time and in perfect condition",
+      "text": "good",
+      "rating": 5
+    },
+    {
+      "id": "c425",
+      "companyId": "ee66",
+      "name": "pawan",
+      "date": "01/11/2025 15:38",
+      "subject": "very good",
+      "text": "good",
       "rating": 5
     }
   ]

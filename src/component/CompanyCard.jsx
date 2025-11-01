@@ -1,14 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 
-const CompanyCard = ({ company }) => {
+
+function CompanyCard({ company }) {
+
   const rating = Math.round(company.rating || 0);
-  const reviewsCount = company.reviewsCount || 0;
+  const reviewsCount = company.reviewsCount || 0; 
 
   return (
-    <Link
-      to={`/companyreview/${company.id}`}
-      style={{ textDecoration: "none", color: "inherit" }}
+    <Link 
+      to={`/companyreview/${company.id}`} 
+      style={{ textDecoration: 'none', color: 'inherit' }} 
     >
       <div className="company-card">
         <div className="logo" style={{ backgroundColor: company.bgColor }}>
@@ -28,13 +30,17 @@ const CompanyCard = ({ company }) => {
         </div>
 
         <div className="footer">
-          <span className="date">Founded on {company.founded}</span>
+          <span className="date">
+            Founded on {company.founded}
+          </span>
 
-          <button className="detail-btn">Detail Review</button>
+          <button className="detail-btn">
+            Detail Review
+          </button>
         </div>
       </div>
     </Link>
   );
-};
+}
 
 export default CompanyCard;

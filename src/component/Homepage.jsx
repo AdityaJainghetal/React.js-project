@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CompanyCard from "./CompanyCard";
 
-
-
 const Home = () => {
- 
-
   const [companies, setCompanies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
@@ -19,7 +15,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch companies from API
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -37,12 +32,10 @@ const Home = () => {
     fetchCompanies();
   }, []);
 
-  // Search Filter
   const filteredCompanies = companies.filter((company) =>
     company.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Sort Logic
   const sortedCompanies = [...filteredCompanies].sort((a, b) => {
     if (sortBy === "name") {
       return a.name.localeCompare(b.name);
@@ -54,7 +47,6 @@ const Home = () => {
     return 0;
   });
 
-  // Add New Company (POST to API)
   const handleAddCompany = async (e) => {
     e.preventDefault();
     if (!newCompany.name || !newCompany.address) {
@@ -67,7 +59,7 @@ const Home = () => {
       bgColor: newCompany.bgColor,
       name: newCompany.name,
       address: newCompany.address,
-      founded: new Date().toISOString().split("T")[0], 
+      founded: new Date().toISOString().split("T")[0],
       rating: 0,
       reviews: 0,
     };
@@ -90,7 +82,6 @@ const Home = () => {
     }
   };
 
-  // Loading & Error States
   if (loading) return <div className="loading">Loading companies...</div>;
   if (error) return <div className="error">Error: {error}</div>;
 
@@ -133,7 +124,6 @@ const Home = () => {
         </div>
       </div>
 
-     
       {showAddForm && (
         <div className="add-form-container">
           <h3>Add New Company</h3>
@@ -178,10 +168,8 @@ const Home = () => {
         </div>
       )}
 
-      
       <div className="results">Result Found: {sortedCompanies.length}</div>
 
-   
       <div className="company-list">
         {sortedCompanies.map((company) => (
           <CompanyCard key={company.id} company={company} />
@@ -189,6 +177,6 @@ const Home = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Home;

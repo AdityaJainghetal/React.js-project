@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams } from "react-router-dom";
 
 const ReviewPage = () => {
   const { companyId } = useParams();
@@ -7,9 +7,14 @@ const ReviewPage = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({ name: '', subject: '', text: '', rating: 5 });
+  const [formData, setFormData] = useState({
+    name: "",
+    subject: "",
+    text: "",
+    rating: 5,
+  });
   const [showForm, setShowForm] = useState(false);
-
+  const [toast, setToast] = useState(null);
   const getConsistentRandom = (str, id, max = 100) => {
     let hash = 0;
     const input = `${str}${id}`;
@@ -20,35 +25,74 @@ const ReviewPage = () => {
     return Math.abs(hash) % max;
   };
 
-  
   const getGenderFromName = (name) => {
-    const femaleNames = ['ankita', 'ayushi', "radha"];;
-    const maleNames = ['ankit', 'ram', 'pawan', "Aditya", "Asmik", "sumit"]
+    const femaleNames = ["ankita", "ayushi", "radha"];
+    const maleNames = ["ankit", "ram", "pawan", "aditya", "asmik", "sumit"];
+    const first = name.trim().split(" ")[0].toLowerCase();
 
-    const first = name.trim().split(' ')[0].toLowerCase();
+    if (femaleNames.some((n) => first.includes(n))) return "women";
+    if (maleNames.some((n) => first.includes(n))) return "men";
 
-    if (femaleNames.some(n => first.includes(n.toLowerCase()))) return 'women';
-    if (maleNames.some(n => first.includes(n.toLowerCase()))) return 'men';
-
-    
-    return getConsistentRandom(name, '', 2) === 0 ? 'women' : 'men';
+    return getConsistentRandom(name, "", 2) === 0 ? "women" : "men";
   };
- 
+
+  const STORAGE_KEY = `likes_${companyId}`;
+
+  const loadLikes = () => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : {};
+  };
+
+  const saveLikes = (likesObj) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(likesObj));
+  };
+
+  const toggleLike = useCallback(
+    (reviewId) => {
+      const likes = loadLikes();
+      likes[reviewId] = !likes[reviewId];
+      saveLikes(likes);
+      setReviews((prev) =>
+        prev.map((r) =>
+          r.id === reviewId ? { ...r, liked: likes[reviewId] } : r
+        )
+      );
+    },
+    [companyId]
+  );
+
+  const shareReview = async (reviewId) => {
+    const url = `${window.location.origin}${window.location.pathname}#review-${reviewId}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setToast("Link copied to clipboard!");
+      setTimeout(() => setToast(null), 2000);
+    } catch (err) {
+      setToast("Failed to copy link");
+      setTimeout(() => setToast(null), 2000);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [companyRes, reviewsRes] = await Promise.all([
           fetch(`http://localhost:3000/companies/${companyId}`),
-          fetch(`http://localhost:3000/reviews?companyId=${companyId}`)
+          fetch(`http://localhost:3000/reviews?companyId=${companyId}`),
         ]);
 
-        if (!companyRes.ok) throw new Error('Company not found');
+        if (!companyRes.ok) throw new Error("Company not found");
         const companyData = await companyRes.json();
         const reviewsData = await reviewsRes.json();
 
+        const likes = loadLikes();
+        const enriched = reviewsData.map((r) => ({
+          ...r,
+          liked: !!likes[r.id],
+        }));
+
         setCompany(companyData);
-        setReviews(reviewsData);
+        setReviews(enriched);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -56,7 +100,7 @@ const ReviewPage = () => {
       }
     };
     fetchData();
-  }, [companyId]);
+  }, [companyId, toggleLike]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -67,58 +111,79 @@ const ReviewPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.subject || !formData.text) {
-      alert('Fill all fields');
+      alert("Fill all fields");
       return;
     }
 
+    const finalCompanyId = isNaN(companyId)
+      ? companyId
+      : parseInt(companyId, 10);
+
     const newReview = {
-      companyId: parseInt(companyId),
+      companyId: finalCompanyId,
       name: formData.name,
-      date: new Date().toLocaleString('en-GB', {
-        day: '2-digit', month: '2-digit', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      }).replace(',', ''),
+      date: new Date()
+        .toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+        .replace(",", ""),
       subject: formData.subject,
       text: formData.text,
       rating: formData.rating,
     };
 
     try {
-      const reviewRes = await fetch('http://localhost:3000/reviews', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const reviewRes = await fetch("http://localhost:3000/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newReview),
       });
-      const addedReview = await reviewRes.json();
 
+      if (!reviewRes.ok) throw new Error("Failed to submit review");
+
+      const addedReview = await reviewRes.json();
+      if (!addedReview.id) addedReview.id = Date.now();
+
+      // Update average rating
       const total = reviews.reduce((s, r) => s + r.rating, 0) + formData.rating;
       const count = reviews.length + 1;
       const avgRating = total / count;
 
       await fetch(`http://localhost:3000/companies/${companyId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reviewsCount: count, rating: avgRating }),
       });
 
-      setReviews([addedReview, ...reviews]);
-      setCompany({ ...company, reviewsCount: count, rating: avgRating });
-      setFormData({ name: '', subject: '', text: '', rating: 5 });
+      setReviews([{ ...addedReview, liked: false }, ...reviews]);
+      setCompany((prev) => ({
+        ...prev,
+        reviewsCount: count,
+        rating: avgRating,
+      }));
+      setFormData({ name: "", subject: "", text: "", rating: 5 });
       setShowForm(false);
     } catch (err) {
-      alert(err.message);
+      console.error(err);
+      alert(err.message || "Something went wrong");
     }
   };
 
   const renderStars = (rating, interactive = false) => {
-    return [1, 2, 3, 4, 5].map(star => (
+    return [1, 2, 3, 4, 5].map((star) => (
       <span
         key={star}
-        className={`star ${interactive ? 'interactive' : ''} ${star <= rating ? 'filled' : ''}`}
+        className={`star ${interactive ? "interactive" : ""} ${
+          star <= rating ? "filled" : ""
+        }`}
         onClick={() => interactive && handleRating(star)}
-        style={{ cursor: interactive ? 'pointer' : 'default' }}
+        style={{ cursor: interactive ? "pointer" : "default" }}
       >
-        {star <= rating ? '★' : '☆'}
+        {star <= rating ? "★" : "☆"}
       </span>
     ));
   };
@@ -129,10 +194,12 @@ const ReviewPage = () => {
 
   return (
     <div className="container">
-
       <div className="header">
         <div className="logo">
-          <div className="logo-circle" style={{ backgroundColor: company.bgColor }}>
+          <div
+            className="logo-circle"
+            style={{ backgroundColor: company.bgColor }}
+          >
             {company.logo}
           </div>
         </div>
@@ -140,12 +207,19 @@ const ReviewPage = () => {
           <h1>{company.name}</h1>
           <p className="address">Location: {company.address}</p>
           <div className="rating">
-            <span className="stars">{renderStars(Math.round(company.rating || 0))}</span>
-            <span className="reviews-count">{company.reviewsCount || 0} Reviews</span>
+            <span className="stars">
+              {renderStars(Math.round(company.rating || 0))}
+            </span>
+            <span className="reviews-count">
+              {company.reviewsCount || 0} Reviews
+            </span>
           </div>
         </div>
-        <button className="add-review-btn" onClick={() => setShowForm(!showForm)}>
-          {showForm ? 'Cancel' : '+ Add Review'}
+        <button
+          className="add-review-btn"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {showForm ? "Cancel" : "+ Add Review"}
         </button>
         <p className="founded">Founded on {company.founded}</p>
       </div>
@@ -156,14 +230,35 @@ const ReviewPage = () => {
         <div className="review-form-container">
           <h3>Add Your Review</h3>
           <form onSubmit={handleSubmit} className="review-form">
-            <input name="name" placeholder="Your Name" value={formData.name} onChange={handleChange} required />
-            <input name="subject" placeholder="Review Subject" value={formData.subject} onChange={handleChange} required />
-            <textarea name="text" placeholder="Write your review..." rows="4" value={formData.text} onChange={handleChange} required></textarea>
+            <input
+              name="name"
+              placeholder="Your Name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            <input
+              name="subject"
+              placeholder="Review Subject"
+              value={formData.subject}
+              onChange={handleChange}
+              required
+            />
+            <textarea
+              name="text"
+              placeholder="Write your review..."
+              rows="4"
+              value={formData.text}
+              onChange={handleChange}
+              required
+            ></textarea>
             <div className="form-rating">
               <span>Rating: </span>
               {renderStars(formData.rating, true)}
             </div>
-            <button type="submit" className="submit-btn">Submit Review</button>
+            <button type="submit" className="submit-btn">
+              Submit Review
+            </button>
           </form>
         </div>
       )}
@@ -174,29 +269,60 @@ const ReviewPage = () => {
         {reviews.length === 0 ? (
           <p>No reviews yet. Be the first to review!</p>
         ) : (
-          reviews.map(review => {
+          reviews.map((review) => {
             const gender = getGenderFromName(review.name);
-            const imageId = getConsistentRandom(review.name, review.id, 90) + 10;  
+            const seed = review.id || review.date || review.name;
+            const imageId = getConsistentRandom(review.name, seed, 90) + 10;
+
             return (
-              <div key={review.id} className="review">
+              <div
+                key={review.id}
+                id={`review-${review.id}`} // <-- anchor for share
+                className="review"
+              >
                 <img
                   src={`https://randomuser.me/api/portraits/${gender}/${imageId}.jpg`}
                   alt={review.name}
                   className="reviewer-img"
-                  onError={e => { e.target.src = 'https://randomuser.me/api/portraits/men/1.jpg'; }}
+                  onError={(e) => {
+                    e.target.src =
+                      "https://randomuser.me/api/portraits/men/1.jpg";
+                  }}
                 />
                 <div className="review-content">
                   <div className="reviewer-name">{review.name}</div>
                   <div className="review-date">{review.date}</div>
                   <div className="review-subject">{review.subject}</div>
                   <p className="review-text">{review.text}</p>
-                  <div className="review-rating">{renderStars(review.rating)}</div>
+                  <div className="review-rating">
+                    {renderStars(review.rating)}
+                  </div>
+
+                  <div className="review-actions">
+                    <button
+                      className={`like-btn ${review.liked ? "liked" : ""}`}
+                      onClick={() => toggleLike(review.id)}
+                      aria-label={review.liked ? "Unlike" : "Like"}
+                    >
+                      {review.liked ? "❤️" : "🤍"} Like
+                    </button>
+
+                    <button
+                      className="share-btn"
+                      onClick={() => shareReview(review.id)}
+                      aria-label="Share this review"
+                    >
+                      🔗 Share
+                    </button>
+                  </div>
                 </div>
               </div>
             );
           })
         )}
       </div>
+
+      {toast && <div className="toast">{toast}</div>}
     </div>
   );
 };
